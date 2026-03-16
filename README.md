@@ -20,7 +20,7 @@ Inside Airbnb (Sep 2025)
         ↓
   Python · Limpieza y transformación
         ↓
-  SQL · Modelado dimensional (Star Schema)
+  SQL · Modelado dimensional 
         ↓
   Power BI · Dashboard analítico interactivo
 ```
