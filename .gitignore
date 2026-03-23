@@ -1,0 +1,4 @@
+# Archivos grandes
+data/raw/calendar.csv
+sql/dump_airbnb.sql
+data/clean/calendar_limpio_filtrado.csv
