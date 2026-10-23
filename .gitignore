@@ -1,4 +1,19 @@
-# Archivos grandes
+# Archivos grandes (se descargan de Inside Airbnb o se regeneran con los notebooks)
 data/raw/calendar.csv
-sql/dump_airbnb.sql
+data/raw/listings.csv.gz
 data/clean/calendar_limpio_filtrado.csv
+sql/dump_airbnb.sql
+
+# Jupyter
+.ipynb_checkpoints/
+__pycache__/
+
+# Archivos temporales de Office
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini

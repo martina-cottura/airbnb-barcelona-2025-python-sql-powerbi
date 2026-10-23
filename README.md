@@ -1,205 +1,161 @@
-# airbnb-barcelona-2025-python-sql-powerbi
+# Airbnb Barcelona 2025 · Análisis del mercado de viviendas turísticas
 
-# 🏙️ Mercado Turístico de Airbnb en Barcelona — 2025
+Análisis descriptivo de la oferta de Airbnb en Barcelona, construido de punta a punta con **Python → MySQL → Power BI**.
 
-> **Proyecto académico con simulación de consultoría** · Barcelona Market Analytics (BMA)  
-> Análisis del mercado de viviendas turísticas para Mediterranean Urban Investments (MUI)
+El proyecto responde a una pregunta de negocio concreta: **cuál es la dimensión y la composición actual del mercado de viviendas de uso turístico en Barcelona, en volumen, precios, tipología de alojamiento y cumplimiento normativo**. Es una foto del mercado al **14/9/2025**, la fecha del scraping.
 
----
-
-## 📋 Descripción
-
-Análisis descriptivo del mercado de viviendas turísticas en **Airbnb Barcelona (2025)**, desarrollado como **proyecto académico** en el que simulamos el rol de una consultora de datos (**Barcelona Market Analytics — BMA**) y creamos un cliente ficticio (**Mediterranean Urban Investments — MUI**), una empresa de inversión inmobiliaria, como destinatario de los análisis y recomendaciones estratégicas.
-
-Este marco de simulación profesional permitió estructurar el proyecto con una lógica de negocio real: definición de preguntas estratégicas, reuniones con stakeholders, entregables orientados a la toma de decisiones e insights accionables.
-
-El proyecto integra tres tecnologías clave para construir un pipeline de datos completo: desde la extracción y limpieza de datos hasta la visualización interactiva de resultados.
-
-```
-Inside Airbnb (Sep 2025)
-        ↓
-  Python · Limpieza y transformación
-        ↓
-  SQL · Modelado dimensional 
-        ↓
-  Power BI · Dashboard analítico interactivo
-```
+> **Datos reales y públicos, proyecto académico en equipo.** Los datos provienen de [Inside Airbnb](https://insideairbnb.com/get-the-data/) (edición Barcelona, septiembre de 2025). El encargo es simulado: el equipo actuó como una consultora ficticia, Barcelona Market Analytics (BMA), para un cliente también ficticio, Mediterranean Urban Investments (MUI), una inversora inmobiliaria. Proyecto integrador de un equipo de cuatro personas (ver [Equipo](#equipo)).
 
 ---
 
-## 🎯 Pregunta de negocio
+## Dashboard
 
-> ¿Cuál es la dimensión y composición actual del mercado de viviendas de uso turístico de Airbnb en Barcelona en términos de volumen, precios, tipología de alojamiento y nivel de cumplimiento normativo?
+**1. ¿Dónde está concentrada la oferta?** Volumen de anuncios y hosts, precio promedio, tipología de alojamiento y mapa de concentración por zona. Captura sin filtros.
+
+![Dónde está concentrada la oferta](assets/dashboard_oferta.jpg)
+
+**2. ¿Quién controla el mercado?** Anuncios, hosts y precio según el tipo de host, con desglose por tipología y por zona. Captura con el filtro *Profesional* activo.
+
+![Quién controla el mercado](assets/dashboard_hosts.jpg)
+
+**3. Licencias y estructura regulatoria.** Anuncios por tipo de licencia y de host, precio promedio por licencia y distribución por zona. Captura con el filtro *Con licencia* activo.
+
+![Licencias y estructura regulatoria](assets/dashboard_licencias.jpg)
+
+**4. Estacionalidad.** Evolución diaria de la disponibilidad publicada entre septiembre de 2025 y septiembre de 2026, y mapa de calor por zona y mes. Captura con el filtro *Profesional* activo.
+
+![Estacionalidad](assets/dashboard_estacionalidad.jpg)
 
 ---
 
-## 📊 KPIs principales (scraping · 14 sep 2025)
+## Hallazgos clave
 
-| KPI | Valor |
-|-----|-------|
-| Total anuncios activos | **16.676** |
-| Total hosts | **4.730** |
-| % Anuncios multilisting | **91,24 %** |
-| Precio promedio por noche | **186,86 €** |
-| % Anuncios con licencia HUT | **54,12 %** |
-| Disponibilidad media por anuncio | **227 días / año** |
+| | Cifra | Lectura |
+|---|---|---|
+| Tamaño del mercado | 16.676 anuncios · 4.730 hosts | Anuncios activos (con al menos un día disponible en el año) sobre 19.410 del scraping original. |
+| Profesionalización | 91,2% de los anuncios | Pertenecen a hosts con más de un anuncio. Esos hosts son el 69,1% del total y gestionan 4,65 anuncios de media. No es un mercado de particulares. |
+| Concentración geográfica | 59,6% en dos distritos | Eixample (36,3%) y Ciutat Vella (23,3%) reúnen casi seis de cada diez anuncios. Los distritos periféricos quedan muy por debajo. |
+| Tipología | 66,7% alojamiento completo | Con la habitación privada suman el 98,9% de la oferta. Las habitaciones compartidas y de hotel son marginales. |
+| Licencias | 54,1% con licencia | El 24,0% declara no tener licencia y el 21,9% figura como exento. |
+| Precio y licencia | €261 vs. ~€97 | Precio promedio por noche de los anuncios con licencia frente a los sin licencia o exentos. Dentro de los anuncios con licencia, los de hosts profesionales promedian €264, un 22% más que los de particulares (€217). |
+| Precio por zona | €221,87 en Eixample | Es el distrito con el precio promedio más alto. El promedio de todo el mercado es €186,86. |
 
 ---
 
-## 🗂️ Estructura del repositorio
+## Limitaciones
 
-```
-📁 airbnb-barcelona-2025/
-│
-├── 📁 data/
-│   ├── raw/                        # Datos originales de Inside Airbnb
-│   │   ├── listings.csv
-│   │   ├── calendar.csv
-│   │   └── neighbourhoods.csv
-│   └── clean/                      # Datasets procesados listos para SQL
-│       ├── listings_clean.csv
-│       ├── calendar_limpio_filtrado.csv
-│       └── neighbourhoods_clean.csv
-│
-├── 📁 notebooks/                   # Procesamiento en Python
-│   ├── listings.ipynb
-│   ├── calendar_limpio_filtrado.ipynb
-│   ├── neighbourhoods.ipynb
-│   └── listings_disp.ipynb         # Subconjunto con precio declarado
-│
-├── 📁 sql/                         # Modelado dimensional
-│   ├── airbnb_barcelona_2025.sql   # Script DDL + DML completo
-│   └── dump/                       # DUMP exportado desde MySQL Workbench
-│
-├── 📁 powerbi/
-│   └── airbnb_barcelona_2025.pbix  # Dashboard interactivo
-│
-└── 📄 Informe_Técnico_BMA_2025.pdf # Informe técnico completo
+- **Oferta declarada, no demanda.** La disponibilidad refleja el calendario publicado por los anfitriones al momento del scraping, no reservas ni ocupación efectiva.
+- **Foto estática.** Es un corte transversal de septiembre de 2025. No muestra la evolución del mercado ni el efecto de cambios regulatorios.
+- **Precios sesgados por valores extremos.** El promedio (€186,86) está muy por encima de la mediana (€131), con precios de hasta €10.000 por noche. Además, 1.521 anuncios (9,1%) no publican precio y quedan fuera de las medidas de precio.
+- **Precio listado.** Es el precio del día del scraping. No incorpora estacionalidad ni precios dinámicos.
+- **"Exento" es una declaración del anfitrión, no una verificación.** El 21,9% de los anuncios declara estar exento de licencia. El dataset no permite comprobar si esa exención es válida, así que no se puede asumir que esos anuncios sean irregulares ni que sean legales. Por eso se informan separados del 24,0% sin licencia.
+- **Fuente de terceros y una sola plataforma.** Inside Airbnb no es un dato oficial de Airbnb, y el análisis no cubre otras plataformas de alquiler turístico.
+
+El detalle está en el apartado 3.3 y en el capítulo 9 del informe técnico.
+
+---
+
+## Arquitectura
+
+```mermaid
+flowchart LR
+    A[Inside Airbnb<br/>listings · calendar<br/>neighbourhoods] --> B[Python<br/>limpieza, anuncios activos<br/>tipo de host y de licencia]
+    B --> C[CSV clean]
+    C --> D[MySQL<br/>staging + constelación<br/>de hechos]
+    D --> E[Power BI<br/>modelo semántico<br/>medidas DAX · 4 páginas]
 ```
 
----
+Cada herramienta tiene un rol definido:
 
-## ⚙️ Stack tecnológico
+- **Python** limpia y transforma los tres datasets, filtra los anuncios activos y crea las variables derivadas: precio por persona, tipo de host y tipo de licencia.
+- **MySQL** carga los CSV limpios en tablas staging y construye un esquema de constelación de hechos con dos procesos de negocio de granularidad distinta.
+- **Power BI** importa el modelo, suma una tabla Calendario en DAX para el análisis temporal y presenta el dashboard en cuatro páginas.
 
-| Herramienta | Uso |
-|-------------|-----|
-| **Python** + Pandas | Limpieza, transformación y EDA |
-| **Jupyter / Anaconda** | Entorno de notebooks |
-| **MySQL Workbench** | Modelado dimensional y carga de datos |
-| **Power BI** | Visualización e insights estratégicos |
+### Modelo de datos
 
----
-
-## 🗃️ Modelo de datos
-
-Se implementó un **esquema de constelación de hechos (Fact Constellation Schema)**, dado que el proyecto contempla **dos procesos de negocio con granularidades distintas**, cada uno con su propia tabla de hechos y dimensiones asociadas.
-
-```
-  dim_host ──────────────────────────────────────────────┐
-                                                         │
-  dim_barrio ────────────── fact_anuncios ──── dim_tipo_alojamiento
-                                  │
-                                  │  (id_anuncio como FK)
-                                  │
-                          fact_disponibilidad
-                                  │
-                           Calendario (DAX)        dim_tipo_licencia ─── fact_anuncios
+```mermaid
+flowchart LR
+    H[dim_host] --> FA[fact_anuncios<br/>1 fila = 1 anuncio]
+    B[dim_barrio] --> FA
+    T[dim_tipo_alojamiento] --> FA
+    L[dim_tipo_licencia] --> FA
+    FA -- id_anuncio --> FD[fact_disponibilidad<br/>1 fila = 1 anuncio × 1 día]
+    C[Calendario DAX] --> FD
 ```
 
-**Tablas de hechos — granularidades distintas:**
-
-| Tabla | Granularidad | Registros |
-|-------|-------------|-----------|
-| `fact_anuncios` | 1 fila = 1 anuncio | 16.676 |
-| `fact_disponibilidad` | 1 fila = 1 anuncio × 1 día | 6.086.742 |
-
-> `fact_disponibilidad` no comparte dimensiones descriptivas con `fact_anuncios` en SQL — solo se vincula a ella por `id_anuncio` como clave foránea. En Power BI, su análisis temporal se realiza exclusivamente a través de la tabla **Calendario (DAX)**.
-
-**Tablas de dimensiones** (asociadas a `fact_anuncios`):
-- `dim_host` · `dim_barrio` · `dim_tipo_alojamiento` · `dim_tipo_licencia`
+`fact_disponibilidad` no comparte dimensiones descriptivas con `fact_anuncios`: se vincula solo por `id_anuncio`, y su análisis temporal en Power BI se hace a través de la tabla Calendario.
 
 ---
 
-## 🔍 Fuente de datos
+## Estructura del repositorio
 
-Los datos provienen de [**Inside Airbnb**](https://insideairbnb.com/get-the-data/), repositorio público que recopila información de Airbnb mediante web scraping ético.
-
-- **Scraping:** 14 de septiembre de 2025
-- **Cobertura:** 19.000+ anuncios en Barcelona (16.676 tras limpieza)
-- **Calendario:** 14/09/2025 → 14/09/2026
-- **Ámbito territorial:** 73 barrios · 10 distritos
-
-> ⚠️ Los datos reflejan **oferta declarada**, no demanda real ni ocupación efectiva.
-
----
-
-## 📈 Estructura del dashboard (Power BI)
-
-| Página | Dimensión | Contenido |
-|--------|-----------|-----------|
-| **1** · ¿Dónde está la oferta? | What + Where | Mapa de burbujas, anuncios por zona, tipología |
-| **2** · ¿Quién controla el mercado? | Who + How | Concentración de hosts, multilisting |
-| **3** · Licencias y regulación | Why | Cumplimiento normativo, precio por licencia |
-| **4** · Estacionalidad | When | Disponibilidad mensual, heatmap por distrito |
-
----
-
-## 💡 Insights clave
-
-1. **Mercado altamente profesionalizado** — el 91,2 % de los anuncios pertenecen a hosts con múltiples propiedades.
-2. **Concentración geográfica extrema** — el 60 % de la oferta se ubica en Eixample y Ciutat Vella.
-3. **Riesgo regulatorio significativo** — el 46 % de los anuncios opera sin licencia HUT.
-4. **Modelo dominante: alojamiento completo** — el 99 % es vivienda completa o habitación privada.
-5. **Premio de precio por legalidad** — anuncios con licencia alcanzan un precio promedio un 22 % superior.
-6. **Estacionalidad marcada** — disponibilidad estable en otoño-invierno, reducida en primavera-verano.
-
----
-
-## 🏗️ Cómo reproducir el proyecto
-
-### 1. Preparación de datos (Python)
-```bash
-# Instalar dependencias
-pip install pandas jupyter
-
-# Ejecutar notebooks en orden
-jupyter notebook notebooks/listings.ipynb
-jupyter notebook notebooks/calendar_limpio_filtrado.ipynb
-jupyter notebook notebooks/neighbourhoods.ipynb
+```
+airbnb-barcelona-2025-python-sql-powerbi/
+├── data/
+│   ├── raw/                  # listings.csv y neighbourhoods.csv de Inside Airbnb (sin modificar)
+│   └── clean/                # listings_clean.csv y neighbourhoods_clean.csv
+├── python/notebooks/
+│   ├── 01_limpieza_listings.ipynb
+│   ├── 02_limpieza_calendar.ipynb
+│   └── 03_limpieza_neighbourhoods.ipynb
+├── sql/
+│   └── airbnb_barcelona_2025.sql          # esquema, carga y modelo dimensional
+├── power_bi/
+│   └── airbnb_barcelona_2025.pbix
+├── documentos/
+│   ├── Informe_tecnico_Airbnb_Barcelona_2025.pdf  # metodología, modelo, DAX, hallazgos y diccionario de datos
+│   └── Presentacion_Airbnb_Barcelona_2025.pdf     # presentación al cliente
+├── assets/                   # capturas del dashboard
+└── requirements.txt
 ```
 
-### 2. Modelado en SQL
-```sql
--- Ejecutar en MySQL Workbench
-SOURCE sql/airbnb_barcelona_2025.sql;
-```
-> Requiere habilitar `local_infile` en MySQL y ajustar las rutas de los CSV en las sentencias `LOAD DATA LOCAL INFILE`.
-
-### 3. Dashboard en Power BI
-1. Abrir `powerbi/airbnb_barcelona_2025.pbix`
-2. En **Obtener datos → MySQL**, conectar a `localhost` / `airbnb_barcelona_2025`
-3. Instalar MySQL Connector/NET 8.0.29 si es necesario
+**Archivos que no están en el repositorio por su tamaño:** `data/raw/calendar.csv`, `data/raw/listings.csv.gz`, `data/clean/calendar_limpio_filtrado.csv` y el dump de MySQL. Los dos primeros se descargan de Inside Airbnb y el tercero se regenera con el notebook `02`.
 
 ---
 
-## 👥 Equipo
+## Cómo reproducirlo
+
+**Requisitos:** Python 3.11+, MySQL 8.x, MySQL Connector/NET y Power BI Desktop (Windows).
+
+1. **Python**
+   ```bash
+   pip install -r requirements.txt
+   ```
+   - Descargá de [Inside Airbnb](https://insideairbnb.com/get-the-data/) los archivos `calendar.csv` y `listings.csv.gz` de Barcelona, edición de septiembre de 2025. Puede que esa edición ya no esté publicada en la web.
+   - Los notebooks leen y escriben los CSV en la carpeta desde donde se ejecutan. Copiá ahí los archivos de `data/raw/` y los descargados.
+   - Ejecutalos en orden: `01` genera `listings_clean.csv`, `02` usa `calendar.csv` y `listings_clean.csv` para generar `calendar_limpio_filtrado.csv`, y `03` genera `neighbourhoods_clean.csv`.
+
+2. **MySQL**
+   - Habilitá `local_infile` (`SET GLOBAL local_infile = 1;`).
+   - Antes de ejecutar `sql/airbnb_barcelona_2025.sql`, cambiá las rutas de las sentencias `LOAD DATA LOCAL INFILE`: hoy apuntan a la carpeta local de una integrante del equipo.
+   - El script crea la base `airbnb_barcelona_2025`, las tablas staging, las dimensiones y las tablas de hechos.
+
+3. **Power BI**
+   - Abrí `power_bi/airbnb_barcelona_2025.pbix`.
+   - En **Obtener datos → MySQL**, conectá a `localhost` / `airbnb_barcelona_2025`. Si hace falta, instalá MySQL Connector/NET 8.0.29.
+   - Hacé clic en **Actualizar**.
+
+---
+
+## Documentación
+
+El **informe técnico** (`documentos/Informe_tecnico_Airbnb_Barcelona_2025.pdf`) recoge el contexto regulatorio, la metodología, el procesamiento en Python, el modelo en SQL, las medidas DAX, la estructura del dashboard, los hallazgos, las recomendaciones y el diccionario de datos.
+
+La **presentación** (`documentos/Presentacion_Airbnb_Barcelona_2025.pdf`) resume el análisis para el cliente: contexto, preguntas, dashboard, conclusiones y recomendaciones.
+
+---
+
+## Equipo
 
 | Nombre | Rol |
-|--------|-----|
+|---|---|
 | Martina Cottura | Consultoría y análisis |
 | Fernando Ferrari | Consultoría y análisis |
 | Andrea Marques | Consultoría y análisis |
 | Mario Paoloni | Consultoría y análisis |
 
-**Cliente:** Mediterranean Urban Investments (MUI)  
-**Consultora:** Barcelona Market Analytics (BMA)
+Proyecto integrador · Python, SQL y Power BI · 2025.
 
----
+Los datos son públicos y provienen de Inside Airbnb, bajo sus términos de uso. Incluyen el nombre público del anfitrión tal como figura en Airbnb.
 
-## 📄 Licencia
-
-Este proyecto fue desarrollado con fines académicos y de consultoría estratégica. Los datos provienen de Inside Airbnb bajo sus términos de uso públicos. No se incluyen datos personales identificables.
-
----
-
-*Proyecto Integrador · Python | SQL | Power BI · 2025*
+[GitHub de Martina Cottura](https://github.com/martina-cottura)
