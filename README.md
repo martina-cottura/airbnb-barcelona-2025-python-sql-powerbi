@@ -8,6 +8,20 @@ El proyecto responde a una pregunta de negocio concreta: **cuál es la dimensió
 
 ---
 
+## Origen de los datos
+
+Los datos son reales y públicos. Los publica [Inside Airbnb](https://insideairbnb.com/get-the-data/), un proyecto independiente que recopila por web scraping la información visible en los anuncios de Airbnb. No son datos oficiales de la plataforma ni registros de reservas.
+
+| Archivo | Qué registra | Corte |
+|---|---|---|
+| `listings` | Un anuncio por fila: host, barrio, tipo de alojamiento, precio y licencia | 19.410 anuncios del scraping del 14/9/2025 (16.676 activos tras la limpieza) |
+| `calendar` | Un anuncio por día: disponibilidad publicada | 14/9/2025 a 14/9/2026 |
+| `neighbourhoods` | Barrios y distritos de Barcelona | 73 barrios, 10 distritos |
+
+Saber cómo se genera el dato define qué se puede concluir. Como sale del anuncio y no de una transacción, refleja lo que el anfitrión declara (precio listado, calendario, licencia) y no lo que efectivamente ocurre. Por eso el análisis habla de oferta y no de demanda u ocupación, y por eso "exento" se trata como una declaración no verificada.
+
+---
+
 ## Dashboard
 
 **1. ¿Dónde está concentrada la oferta?** Volumen de anuncios y hosts, precio promedio, tipología de alojamiento y mapa de concentración por zona. Captura sin filtros.
